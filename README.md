@@ -6,9 +6,15 @@ UHBDB/toolkit is a Nextflow pipeline for updating the Unified Human Bacteriome D
 
 ## Databases
 
-### Current release
+### Current database
+| Release | URL | Size (GB) | Sequence count | Description | Samplesheet |
+|---------|-----|-----------|----------------|-------------|-------------|
+| 2026-03-11 | | 45 GB | 1,001,767 | HQ MAGs from mOTUs-db that were derived from human environments | |
 
 ### Database history
+| Release | URL | Size (GB) | Sequence count | Description | Samplesheet |
+|---------|-----|-----------|----------------|-------------|-------------|
+| 2026-03-05 |  | 35 GB | 825,099 | Initial release of UHBDB created from Progenomes3, GTDB r214, and select JGI HQ isolate assemblies. | |
 
 ## Pipeline summary
 Below is a schematic overview of the UHVDB toolkit. For a more detailed explanation of each step, see the [`SUMMARY.md`](/.github/SUMMARY.md) file.
