@@ -47,7 +47,7 @@ def main(args=None):
     args = parse_args(args)
 
     ### Read fast files TSV file (downloaded fasta files)
-    fast_files_set = set(
+    fasta_files_set = set(
         pl.read_csv(args.new_fasta_tsv, separator="\t", has_header=False)['column_1']
     )
 
@@ -57,26 +57,19 @@ def main(args=None):
     ### Read new metadata
     new_metadata_df = (
         pl.read_csv(args.new_metadata, separator="\t")
-        .filter(pl.col('genome_id').is_in(fast_files_set))
+        .filter(pl.col('genome_id').is_in(fasta_files_set))
     )
 
     ### Read combined clusters file
     clusters_df = (
         pl.read_csv(args.combined_clusters, separator="\t", has_header=True)
-            .rename({"object": "genome_id", "cluster": "combined_cluster"})
+            .rename({"object": "genome_id"})
     )
 
     ### Create output metadata
     (
-        pl.concat([old_metadata_df, new_metadata_df], how="diagonal")
+        pl.concat([new_metadata_df], how="diagonal")
             .join(clusters_df, on="genome_id", how="left")
-            .with_columns([
-                pl.when(pl.col('combined_cluster').is_not_null())
-                    .then(pl.col('combined_cluster'))
-                    .otherwise(pl.col('cluster'))
-                    .alias('cluster')
-            ])
-            .drop('combined_cluster')
             .sort('n50', descending=True)
             .write_csv(args.output_metadata, separator="\t", include_header=True)
     )
@@ -84,7 +77,7 @@ def main(args=None):
     ### Create output new unique fastas file
     (
         pl.read_csv(args.new_fasta_tsv, separator="\t", has_header=False, new_columns=['genome_id', 'path'])
-            .filter(pl.col('genome_id').is_in(set(clusters_df['combined_cluster'])))
+            .filter(pl.col('genome_id').is_in(set(clusters_df['cluster'])))
             [['path']]
             .write_csv(args.output_new_unique_fastas, separator="\t", include_header=False)
     )

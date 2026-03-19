@@ -46,16 +46,17 @@ def main(args=None):
     ### Group by genus
     genera_lst = sorted_df["genus"].unique().to_list()
     for genus in genera_lst:
+        genus_name = genus.replace(" ", "_")  # replace spaces with underscores for file naming
         group = sorted_df.filter(pl.col("genus") == genus)
         if group.height >= args.large_threshold:
             prefix = "large_genera/"
         else:
             prefix = "small_genera/"
 
-        urls_path = f"{prefix}{genus}_urls.txt"
-        local_paths = f"{prefix}{genus}_local_fastas.txt"
-        object_file = f"{prefix}{genus}_objects.txt"
-        meta_file = f"{prefix}{genus}_metadata.tsv"
+        urls_path = f"{prefix}{genus_name}_urls.txt"
+        local_paths = f"{prefix}{genus_name}_local_fastas.txt"
+        object_file = f"{prefix}{genus_name}_objects.txt"
+        meta_file = f"{prefix}{genus_name}_metadata.tsv"
 
         # write out aria2c file
         (

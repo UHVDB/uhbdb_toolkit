@@ -11,8 +11,8 @@ process SPLITBYGENUS {
     output:
     path("large_genera/*")  , emit: large   , optional: true
     path("small_genera/*")  , emit: small   , optional: true
-    path(".command.log")    , emit: log
-    path(".command.sh")     , emit: script
+    // path(".command.log")    , emit: log
+    // path(".command.sh")     , emit: script
 
     script:
     """
